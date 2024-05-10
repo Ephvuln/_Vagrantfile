@@ -10,7 +10,8 @@ $pkgs = <<-SHELLP
     shellter \
     xclip \
     git \
-    wine32
+    wine32 \
+    bloodhound
 SHELLP
 
 $manual_pkgs = <<-SHELLM
