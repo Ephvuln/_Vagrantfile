@@ -28,6 +28,7 @@ Vagrant.configure("2") do |config|
     vb.memory = "5120"
   end
 
+  config.vm.provision "shell", inline: "echo '\nPasswordAuthentication no' >> /etc/ssh/ssh_config";
   config.vm.provision "shell", inline: $pkgs;
   config.vm.provision "shell", inline: $manual_pkgs;
   config.vm.provision "file", source: "files/aliases", destination: "/tmp/aliases"
